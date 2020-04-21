@@ -508,6 +508,183 @@ for iterating_var in sequence:
     该处的 pass 便是占据一个位置，因为如果定义一个空函数程序会报错，
     当你没有想好函数的内容是可以用 pass 填充，使程序可以正常运行。
 
-## Github 使用
+# 2020.0419
+### 日期和时间
+* time 模块下有很多函数可以转换常见日期格式，如函数time.time()用于获取当前时间戳
+```bash
+import time #引入time模块
+ticks = time.time() #获取当前时间戳
+print(ticks)#每个时间戳都以自从1970年1月1日午夜经过了多少秒来表示
+import datetime
+i = datetime.datetime.now()
+print ("当前的日期和时间是 %s" % i)
+print ("ISO格式的日期和时间是 %s" % i.isoformat() )
+print ("当前的年份是 %s" %i.year)
+print ("当前的月份是 %s" %i.month)
+print ("当前的日期是  %s" %i.day)
+print ("dd/mm/yyyy 格式是  %s/%s/%s" % (i.day, i.month, i.year) )
+print ("当前小时是 %s" %i.hour)
+print ("当前分钟是 %s" %i.minute)
+print ("当前秒是  %s" %i.second)
+结果：
+1587317343.8574755
+当前的日期和时间是 2020-04-20 01:29:03.857475
+ISO格式的日期和时间是 2020-04-20T01:29:03.857475
+当前的年份是 2020
+当前的月份是 4
+当前的日期是  20
+dd/mm/yyyy 格式是  20/4/2020
+当前小时是 1
+当前分钟是 29
+当前秒是  3
+```
+### 函数
+* 定义一个函数
+  * 函数代码块以 def 关键词开头，后接函数标识符名称和圆括号()。
+  * 传入的参数和自变量放圆括号中间，圆括号间可以用于定义参数。
+  * 函数的第一行语句可以选择性地使用文档字符串—用于存放函数说明。
+  * 函数内容以冒号起始，并且缩进
+  * return [表达式] 结束函数，选择性地返回一个值给调用方，不带表达式的return相当于返回 None
+格式：
+```bash
+def functionname( parameters ):
+   "函数_文档字符串"
+   function_suite
+   return [expression]
+例：
+def printme(str):
+    "打印传入的字符串" 
+    print(str)
+    return
+printme("调用用户自定义函数")
+结果：
+调用用户自定义函数
+(""字符串作用和函数注释差不多，感觉和#加注释没区别)
+```
+* 可更改(mutsble)对象与不可更改(immutable)对象
+	* 不可变类型 strings,tuples和numbers
+	在fun(a)内部修改a的值，不会影响a本身
+	* 可变类型 list, dict
+	修改后外部的a也会受影响
+python中一切都是对象，严格意义上不能说是值传递还是引用传递，应该说是传不可变对象还是可变对象
 
+```bash
+def changeme(mylist):
+	“修改传入的列表”
+	mylist.append([1,2,3,4]) #append会在数组后加上相应元素
+	print(“函数内取值：”,mylist)
+	return
 
+mylist=[10,20,30]
+changeme(mylist)
+print(“函数外取值”,mylist)
+```
+* 参数
+	* 必备参数
+	* 关键字参数
+	```bash
+	def printme(str,age):
+		print(str,age)
+		return
+	printme(age=50,str=‘namika’)
+	```
+	* 默认参数
+	* 不定长参数
+	```bash
+	def functionname([formal_args], *var_args_tuple):
+		function_suite
+		return [expression]
+	#加*号的变量名存放所有未命名的变量参数
+	```
+	* 匿名函数
+	lambda [arg1 [,arg2,...argn]]: expression #只能写一行
+	```bash
+	sum=lambda arg1,arg2: arg1+arg2
+	#调用sum函数
+	print(“相加后的值：”,sum(10,20))
+  ```
+	* 变量作用域
+		* 全局变量：定义在函数外的变量
+		* 局部变量
+	###  python模块
+	* 模块(module)是一个python文件，以.py结尾
+	模块能使你有逻辑地组织python代码段
+	* 模块的引入 import
+	```bash
+	import os #导入标准库os
+	import module_name #python会从两个地方找这个模块，一个是sys.path,一般安装的python库的目录都可以在sys.path中找到(前提是已经将库的安装目录添加到环境变量中)，另一个是运行文件所在的目录
+	# 建立两个文件demo1.py ,demo2.py
+	demo1.py：
+	import os 
+	import demo2
+	demo2.printself()
+	
+	demo2.py:
+	print(1)
+	def printself():
+		print(‘in demo2’)
+	输出结果：
+	1
+	demo2
+	```
+  * import用法二
+  ```bash
+  from package_name import module_name #把模块族构成的集合成称为包(package)
+  在demo1.py所在的文件夹(file)fisttry下新建名叫branch1的package
+  再在branch1下新建文件demo3.py
+  如何在m1中导入m3.py?看更改后的demo1.py：
+  ```bash
+  from branch import demo3
+  demo3.printSelf()
+  ```
+  * 相对导入和绝对导入
+  from . import module_name。导入和自己同目录下的模块。
+  from .package_name import module_name。导入和自己同目录的包的模块。
+  from .. import module_name。导入上级目录的模块。
+  from ..package_name import module_name。导入位于上级目录下的包的模块。
+  还可以有更多的**.** ，每多一个点就多往上一层目录
+  * import其他用法
+  import moudle_name as alias：有些module_name比较长，可以用as改名，如import numpy as np。
+  from module_name import function_name, variable_name, class_name。上面导入的都是整个模块，有时候只想使用模块中的某些函数、某些变量、某些类，就可以用这种写法。使用逗号可以导入模块中的多个元素
+  * dir()函数
+    * 当给dir()提供一个模块名字时，它返回在那个模块中定义的名字的列表。当没有为其提供参数时, 它返回当前模块中定义的名字的列表
+    ```bash
+    import math
+    content = dir(math)
+    print content
+    ```
+  * python的PATH变量
+  * 全局变量在函数内调用时需要global一下
+  ```bash
+  Money = 2000
+  def AddMoney():
+    global Money
+    Money = Money + 1
+  ```
+  * globals(),locals(),reload()函数
+    * globals()和locals()返回全局和局部命名空间里的名字。
+    在函数内部调用 locals()，返回的是所有能在该函数里访问的命名。
+    在函数内部调用 globals()，返回的是所有在该函数里能访问的全局名字。
+    返回类型都是字典
+    * 当一个模块被导入到一个脚本，模块顶层部分的代码只会被执行一次。
+    因此，如果想重新执行模块里顶层部分的代码，用reload()，该函数会重新导入之前导入过的模块
+  * python中的包(package)
+    * 包是一个分层次的文件目录结构，它定义了一个由模块及子包，和子包下的子包等组成的Python的应用环境。
+    简单来说，包就是文件夹(file)，但该文件夹下必须存在 __ init__.py 文件, 该文件的内容可以为空。__ init__.py 用于标识当前文件夹是一个包。
+### python文件I/O
+* 基本的I/O函数：
+  * print
+  * raw_input :从标准输入读取一个行并返回一个字符串(去掉结尾的换行符)
+  * input :与raw_input类似,可以接收一个Python表达式作为输入，并将运算结果返回
+  * open :类似c中的fopen
+  * close() 
+  * write() :fwrite
+  * read()  :fread
+  * tell() 文件定位
+  * rename() 
+  * remove() 删除文件
+  * os中的
+    * mkdir() 创建新目录
+    * chdir() 改变目录
+    * getcwd() 显示当前工作目录
+    * rmdir() 删除目录
