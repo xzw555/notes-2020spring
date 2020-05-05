@@ -1,4 +1,31 @@
 # 2020.0330
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [2020.0330](#20200330)
+  - [python特点](#python特点)
+  - [面对对象的思维方式](#面对对象的思维方式)
+  - [Pycharm安装](#pycharm安装)
+- [2020.0331](#20200331)
+- [2020.0402](#20200402)
+- [2020.0403](#20200403)
+- [2020.0404](#20200404)
+    - [Linux常用命令](#linux常用命令)
+- [2020.0406](#20200406)
+    - [python学习记录](#python学习记录)
+      - [python基本语法](#python基本语法)
+      - [python变量类型](#python变量类型)
+    - [运算符](#运算符)
+    - [常用语句](#常用语句)
+- [2020.0419](#20200419)
+    - [日期和时间](#日期和时间)
+    - [函数](#函数)
+    - [python文件I/O](#python文件io)
+    - [文件专题编程练习](#文件专题编程练习)
+      - [os包](#os包)
+
+<!-- /code_chunk_output -->
 ## python特点
 * Python是完全面向对象的语言
   * 函数、模块、数字、字符串都是对象，在Python中一切皆对象
@@ -511,7 +538,7 @@ for iterating_var in sequence:
 # 2020.0419
 ### 日期和时间
 * time 模块下有很多函数可以转换常见日期格式，如函数time.time()用于获取当前时间戳
-```bash
+```python
 import time #引入time模块
 ticks = time.time() #获取当前时间戳
 print(ticks)#每个时间戳都以自从1970年1月1日午夜经过了多少秒来表示
@@ -561,7 +588,7 @@ printme("调用用户自定义函数")
 调用用户自定义函数
 (""字符串作用和函数注释差不多，感觉和#加注释没区别)
 ```
-* 可更改(mutsble)对象与不可更改(immutable)对象
+* 可更改(mutable)对象与不可更改(immutable)对象
 	* 不可变类型 strings,tuples和numbers
 	在fun(a)内部修改a的值，不会影响a本身
 	* 可变类型 list, dict
@@ -672,9 +699,9 @@ print(“函数外取值”,mylist)
     * 包是一个分层次的文件目录结构，它定义了一个由模块及子包，和子包下的子包等组成的Python的应用环境。
     简单来说，包就是文件夹(file)，但该文件夹下必须存在 __ init__.py 文件, 该文件的内容可以为空。__ init__.py 用于标识当前文件夹是一个包。
 ### python文件I/O
-* 基本的I/O函数：
+* 基本的I/O函数：(INPUT,OUTPUT)
   * print
-  * raw_input :从标准输入读取一个行并返回一个字符串(去掉结尾的换行符)
+  * ~~raw_input :从标准输入读取一个行并返回一个字符串(去掉结尾的换行符)~~ python3中与input合并
   * input :与raw_input类似,可以接收一个Python表达式作为输入，并将运算结果返回
   * open :类似c中的fopen
   * close() 
@@ -688,3 +715,259 @@ print(“函数外取值”,mylist)
     * chdir() 改变目录
     * getcwd() 显示当前工作目录
     * rmdir() 删除目录
+#### os包
+* 用remove()删除指定文件
+```python
+import os
+file = "newfile1.txt"
+if os.path.exists(file):
+    os.remove(file)
+else:
+    print(file + "文件未找到")
+```
+删除失败,为什么?(newfile1.txt和exercise存放在同一文件夹C:\Users\24284\PycharmProjects下)
+原因:应该将newfile1.txt放在exercise文件夹里
+* 用mkdir()创建指定目录
+```python
+from os import mkdir
+mkdir ("mydir")
+```
+在exercise下创建了名叫mydir的目录
+但是用上面的方法无法删除mydir目录,为什么?
+* 用rmdir()删除目录(前提是目录为空)
+```python
+import os
+dir = "mydir"
+if os.path.exists(dir):
+    os.rmdir(dir)
+else:
+    print(dir + "目录不存在")
+```
+成功删除mydir目录
+* system方法
+```python
+import os
+cur_path=os.path.dirname(__file__) #获得当前文件的绝对路径
+os.system('cls') #清屏,但是清屏失败,出来了一个乱码
+os.system("mkdir dir2") #创建dir2目录,这个和直接os.mkdir("dir2")有什么区别?
+os.system("copy ossystem.py dir2\copyfile.py") #文件复制
+file=cur_path + "\dir2\copyfile.py"
+os.system("notepad" + file)  #用记事本打开copyfile.py文件.失败,出来的也是乱码
+```
+#### shutil包
+* 将shutil.py文件复制为newfile.py
+```python
+import os,shutil
+cur_path=os.path.dirname(__file__)
+destfile = cur_path + "\\" + "newfile.py"
+shutil.copy('shutil.py', destfile)
+运行出错
+Traceback (most recent call last):
+  File "C:/Users/24284/PycharmProjects/exercise/fileopen.py", line 4, in <module>
+    shutil.copy('shutil.py', destfile)
+  File "D:\python3.8\lib\shutil.py", line 409, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "D:\python3.8\lib\shutil.py", line 259, in copyfile
+    with open(src, 'rb') as fsrc, open(dst, 'wb') as fdst:
+FileNotFoundError: [Errno 2] No such file or directory: 'shutil.py'
+```
+#### glob包
+```python
+import glob
+files = glob.glob("glob.py") + glob.glob("os*.py") + glob.glob("*.txt")
+for file in files
+    print(file)
+出错
+File "C:/Users/24284/PycharmProjects/exercise/fileopen.py", line 3
+    for file in files
+                    ^
+SyntaxError: invalid syntax
+```
+### 文件专题编程练习
+* 打开并修改文件
+```python
+#将content写入file1.txt文件
+content='''Hello python
+中文
+Welcome
+'''
+f=open('file1.txt','w')
+f.write(content)
+f.close()
+#打印file.txt文件
+f=open('file1.txt','r')
+for line in f:
+    print(line,end="")
+f.close()
+```
+* open详细介绍
+```python
+# open(filename[,mode][,encode])
+# filename 文件名; mode打开模式; encode 指定文件编码模式
+#windows中文默认是cp936,即ANSI编码
+#可以用下列编码获得当前操作系统的默认编码
+import locale
+print(locale.getpreferredencoding())
+f = open('file1.txt','r',encoding='cp936')
+for line in f:
+    print(line,end='')
+#end=''让print函数不会在字符串末尾添加一个换行符，而是添加一个空字符串
+f.close()
+结果:
+cp936
+Hello python
+中文
+Welcome
+奇怪的是建了个UTF-8编码的file2.txt后,用encoding='cp936'依旧可以打开,没报错
+```
+* read详细介绍
+```python
+f = open('file2.txt','r',encoding = 'cp936')
+str1 = f.read(2)
+print(str1)
+f.close()
+结果:
+11 #file2中存储了11,编码是UTF-8
+但是encoding='UTF-8'打开file1却失败了
+file1是ANSI编码
+```
+上网查如何用python看文件的编码模式,发现要下载chardet包,第一次install失败
+关掉pycharm,用管理员模式运行之后再安装就成功了
+但是chardet查出的文件格式是KOI8-R,语言是Russian...
+```python
+import chardet
+data = open('file1.txt','rb').read()
+print(chardet.detect(data))
+{'encoding': 'KOI8-R', 'confidence': 0.682639754276994, 'language': 'Russian'}
+```
+* 用txt文件存储账号和密码
+```python
+import ast #ast包中的literal_eval可进行类型转换
+data = dict()
+f = open('password.txt','r',encoding='KOI8-R')
+filedata = f.read()
+data = ast.literal_eval(filedata) #with语句结束后会自动关闭文件
+f.close()
+print(data)
+结果:
+{'chiou': '1234', 'David': '0800'}
+但是用with语句就会报错
+with open('file1.txt','r') as f
+    for line in f
+        print(line,end='')
+报错信息:File "C:/Users/24284/PycharmProjects/exercise/fileopen.py", line 1
+    with open('file1.txt','r') as f
+                                  ^
+SyntaxError: invalid syntax
+```
+* 账号/密码管理
+```python
+def menu():
+    os.system("cls")
+    print("账号/密码管理系统")
+    print("-------------------")
+    print("1.输入账号/密码")
+    print("2.显示账号/密码")
+    print("3.修改密码")
+    print("4.删除账号/密码")
+    print("0.结束程序")
+    print("------------------")
+
+def ReadData():
+    f=open("password.txt",'r',encoding='UTF-8-sig')
+    filedata=f.read()
+    if filedata != "":
+        data = ast.literal_eval(filedata)
+        return data
+    else: return dict() #返回一个空字典
+    f.close()
+
+def disp_data():
+    print("账号\t密码")
+    print("================")
+    for key in data:
+        print("{}\t{}".format(key,data[key]))
+    input("按任意键返回主菜单")
+
+def input_data():
+    while True:
+        name=input("请输入账号(Enter=>停止输入)")
+        if name=="": break;
+        if name in data:
+            print("{}账号已存在!".format(name))
+            continue
+        password=input("请输入密码")
+        data[name]=password
+        f = open('password.txt','w',encoding='UTF-8-sig')
+        f.write(str(data))
+        print("{}保存完毕".format(name))
+
+def edit_data():
+    while True:
+        name=input("请输入要修改的账号(enter=>停止输入)")
+        if name=="":break
+        if not name in data:
+            print("{}账号不存在".format(name))
+            continue
+        print("原密码为:{}".format(data[name]))
+        password=input("请输入新密码")
+        data[name]=password
+        f=open('password.txt','w',encoding='UTF-8-sig')
+        f.write(str(data))
+        input("密码更改完毕,请按任意键返回主菜单")
+        break
+
+def delete_data():
+    while True:
+        name=input("请输入要删除的账号(enter=>停止输入)")
+        if name=="": break
+        if not name in data:
+            print("{}账号不存在!".format(name))
+            continue
+        print("确定删除{}的数据!:".format(name))
+        yn=input("(Y/N)?")
+        if(yn=='Y' or yn=='y'):
+            del data[name]
+            f=open("password.txt",'w',encoding='UTF-8-sig')
+            f.write(str(data))
+            input("已删除完毕,按任意键返回主菜单")
+            break
+###主程序###
+import os,ast
+data=dict()
+
+data=ReadData() #读取文本后转换为dict
+while True:
+    menu()
+    choice = int(input("请输入您的选择:"))
+    print()
+    if choice == 1:
+        input_data()
+    elif choice==2:
+        disp_data()
+    elif choice==3:
+        edit_data()
+    elif choice==4:
+        delete_data()
+    else:
+        break
+
+print("程序执行完毕")
+```
+
+### 类和对象
+面对对象技术简介:
+* 面对对象三大特点:
+  * 数据封装
+  * 继承
+  * 多态
+* 类(class):描述具有相同的属性和方法的对象的集合,定义了该集合中每个对象所共有的属性和方法,对象是类的实例.
+class Student(object):
+  pass
+class后紧跟的是类名,通常是大写开头的单词,object表示该类是从哪个类继承下来的
+若没有合适的继承类,就使用object类,这是所有类都会继承的类
+定义好之后就可以根据Student类创建出Student的实例,创建实例是通过
+类名+()实现的
+bart = Student()
+bart指向的就是Student的实例,可以给实例绑定属性,比如给bart绑定name属性
+bart.name = 'Bart Simpson'
