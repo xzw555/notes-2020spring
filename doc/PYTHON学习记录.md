@@ -22,8 +22,11 @@
     - [日期和时间](#日期和时间)
     - [函数](#函数)
     - [python文件I/O](#python文件io)
-    - [文件专题编程练习](#文件专题编程练习)
       - [os包](#os包)
+      - [shutil包](#shutil包)
+      - [glob包](#glob包)
+    - [文件专题编程练习](#文件专题编程练习)
+    - [类和对象](#类和对象)
 
 <!-- /code_chunk_output -->
 ## python特点
@@ -963,7 +966,7 @@ print("程序执行完毕")
   * 多态
 * 类(class):描述具有相同的属性和方法的对象的集合,定义了该集合中每个对象所共有的属性和方法,对象是类的实例.
 class Student(object):
-  pass
+    pass
 class后紧跟的是类名,通常是大写开头的单词,object表示该类是从哪个类继承下来的
 若没有合适的继承类,就使用object类,这是所有类都会继承的类
 定义好之后就可以根据Student类创建出Student的实例,创建实例是通过
@@ -971,3 +974,21 @@ class后紧跟的是类名,通常是大写开头的单词,object表示该类是�
 bart = Student()
 bart指向的就是Student的实例,可以给实例绑定属性,比如给bart绑定name属性
 bart.name = 'Bart Simpson'
+可以通过定义__init__,在创建实例时就把name,score等属性绑上去
+class Student(object):
+    def __init__(self,name,score):
+        self.name = name
+        self.score = score
+__init__的第一个参数永远是self,表示创建的实例本身
+有了__init__,在创建实例时,不能传入空的参数,必须传入与__init__匹配的参数
+但self不需要传
+bart = Student('Bart Simson', 59)
+* 数据封装
+在上面的student类中,每个实例有自己的数据,可以在student类的内部定义访问数据的函数,这样相当于把数据封装了起来.这些封装数据的函数和类本身关联,称为类的方法
+class Student(object):
+    def __init__(self,name,score):
+        self.name = name
+        self.score = score
+    def print_score(self):
+        pass
+* __init__
